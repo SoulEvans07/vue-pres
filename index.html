@@ -8,7 +8,7 @@
 <body>
   <div id="app">
     <div class="header">
-      <h1>Todos</h1>
+      <h1 v-bind:title="message">{{ title }}</h1>
     </div>
     <div class="content">
     </div>
@@ -16,6 +16,14 @@
 </body>
 <script src="./vue.js"></script>
 <script>
-  
+  const app = new Vue({
+    el: '#app',
+    data:{
+      title: 'Todos',
+    },
+    computed: {
+      message () { return 'You loaded this page on ' + new Date().toLocaleString() }
+    }
+  });
 </script>
 </html>
