@@ -13,11 +13,17 @@
     <div class="content">
       <div class="task-list">
         <div class="task" v-for="task in task_list">
-          <div class="checkbox">
+          <div class="checkbox" v-on:click="task.done = !task.done">
             <i class="fa fa-check" v-if="task.done"></i>
           </div>
           <div class="text">{{ task.text }}</div>
           <i class="remove fa fa-times" title="Delete"></i>
+        </div>
+        <div class="task">
+          <i class="add fa fa-plus" v-on:click="task_list.push({done: false, text:temp_task}); temp_task=null"></i>
+          <input class="textinput" type="text" 
+            v-model="temp_task"
+            v-on:keyup.enter="task_list.push({done: false, text:temp_task}); temp_task=null"/>
         </div>
       </div>
     </div>
@@ -28,6 +34,7 @@
   const app = new Vue({
     el: '#app',
     data:{
+      temp_task: null,
       task_list: [
         { done: true, text: 'Learn Javascript' },
         { done: false, text: 'Learn ES6' },

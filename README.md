@@ -117,3 +117,56 @@ Cseréljük le az emojikat fontawesome ikonokra:
 </div>
 ```
 
+### User Input
+
+Ez eddig mind szép és jó, de még mindig nem tud a felhasználó semmit sem csinálni!
+Szóval alakítsuk át az indikátor ikonunkat egy checkboxá. Ehhez event kezelőket kell megadnunk, amit a vue-n keresztül a v-on direktíva segítségével tehetünk. (valid alias: @)
+
+``` html
+<div class="task" v-for="task in task_list">
+  <div class="checkbox" v-on:click="task.done = !task.done">
+    <i class="fa fa-check" v-if="task.done"></i>
+  </div>
+  <div class="text">{{ task.text }}</div>
+  <i class="remove fa fa-times" title="Delete"></i>
+</div>
+```
+
+Ehhez a direktívához bármelyik vanilla DOM element eventet vagy saját custom eventekhez hozzáköthetjük.
+
+### Two way data binding
+
+Nézzünk meg egy másik példát. Tegyük lehetővé új task felvételét.
+Ehhez először szükségünk lesz egy text input fieldre.
+Ennek a tartalmát kellene nekünk majd gomb vagy enter lenyomására hozzáadnunk a listához.
+
+Ehhez ideiglenesen tárolnunk kell az értékét, ezt tegyük a temp_task változóba.
+
+``` javascript 
+var app = new Vue({
+  el: '#app',
+  data: {
+    temp_task: null,
+    task_list: [
+      { done: true, text: 'Learn Javascript' },
+      { done: false, text: 'Learn ES6' },
+      { done: false, text: 'Learn Vue' },
+      { done: false, text: 'Build something awesome!' }
+    ]
+  }
+})
+```
+
+Na most hogyha ezt a korábbi v-bind:value-val szeretnénk az inputhoz kötni az nem lesz jó nekünk, mert  az csak egy és úgy is rossz irányba köt. Ha a változó megváltozik az input tartalma is megváltozik, de ha az inputot módosítjuk a változó nem fog frissülni.
+
+Erre találták ki a v-model direktívát, ami két irányú adatkötést eredményez.
+
+``` html
+<div class="task">
+    <i class="add fa fa-plus" v-on:click="task_list.push({done: false, text:temp_task}); temp_task=null"></i>
+    <input type="text" class="textinput" 
+           v-model="temp_task"
+           v-on:keyup.enter="task_list.push({done: false, text:temp_task}); temp_task=null"/>
+</div>
+```
+
