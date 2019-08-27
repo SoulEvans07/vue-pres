@@ -73,3 +73,47 @@ var app = new Vue({
   }
 })
 ```
+
+### Conditionals and Loops
+
+Kicsit izgalmasabb terület a feltételes megjelenítés és a ciklikus renderelés.
+
+Mi van, ha több elemet akarunk kiírni egyszerre?
+
+``` javascript
+var app = new Vue({
+  el: '#app',
+  data: {
+    task_list: [
+      { done: true, text: 'Learn Javascript' },
+      { done: false, text: 'Learn ES6' },
+      { done: false, text: 'Learn Vue' },
+      { done: false, text: 'Build something awesome!' }
+    ]
+  }
+})
+```
+
+A **v-for** direktívával képesek vagyunk végigiterálni egy tömbön és az elemeit egyesével véve renderelni.
+
+``` html
+<div class="task" v-for="task in task_list">
+  {{ task.done ? '✔' : '❌' }} {{ task.text }}
+</div>
+```
+
+Ebben a példában már láthatunk is egy feltételt, viszont mi van ha nem szöveget, hanem DOM elemeket szeretnénk feltételesen megjeleníteni.
+
+Erre a **v-if** direktívát tudjuk használni a következő képp.
+Cseréljük le az emojikat fontawesome ikonokra:
+
+``` html
+<div class="task" v-for="task in task_list">
+  <div class="checkbox">
+    <i class="fa fa-check" v-if="task.done"></i>
+  </div>
+  <div class="text">{{ task.text }}</div>
+  <i class="remove fa fa-times" title="Delete"></i>
+</div>
+```
+

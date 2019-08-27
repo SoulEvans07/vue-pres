@@ -96,6 +96,27 @@ input[type="button"], button {
   line-height: 30px;
 }
 
+.task > .textinput {
+  padding: 0 10px;
+  flex-grow: 1;
+  line-height: 30px;
+  background: #eee;
+  color: #2c3e50;
+  font-size: 16px;
+  border: none;
+}
+
+.task > .add {
+  background: #eee;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  font-size: 12px;
+  text-align: center;
+  margin-right: 5px;
+}
+
 .task.done {
   color: #42b983;
 }
