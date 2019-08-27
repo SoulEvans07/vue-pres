@@ -170,3 +170,67 @@ Erre találták ki a v-model direktívát, ami két irányú adatkötést eredm�
 </div>
 ```
 
+### Methods
+
+Kezd ezeknek az utasításoknak a beírása egy kicsit körülményes lenni. Szervezzük ki őket metódusokba!
+
+A componens metódusait a **methods** mező alá gyűjtjük. Ezeken belül a data-ban tárolt értékeket a this kulcsszó után érhetjük el.
+
+``` javascript
+var app = new Vue({
+  el: '#app',
+  data: {
+    temp_task: null,
+    task_list: [
+      { done: true, text: 'Learn Javascript' },
+      { done: false, text: 'Learn ES6' },
+      { done: false, text: 'Learn Vue' },
+      { done: false, text: 'Build something awesome!' }
+    ]
+  },
+  methods: {
+    styleTask(task) {
+      let styleClass = [];
+      if(task.done) styleClass.push('done');
+      return styleClass;
+    },
+    addTask() {
+      this.todos.push({done: false, text:this.temp_task});
+      this.temp_task=null;
+    },
+    switchTaskState(task) {
+      task.done = !task.done;
+    },
+    removeTask(index) {
+      this.task_list.splice(index, 1);
+    }
+  }
+})
+```
+
+``` html
+<div id="app">
+    <div class="header">
+      <h1>Todos</h1>
+    </div>
+    <div class="content">
+      <div class="task-list">
+        <div class="task" v-for="(task, index) in task_list"
+          v-bind:class="styleTask(task)">
+          <div class="checkbox" v-on:click="switchTaskState(task)">
+            <i class="fa fa-check" v-if="task.done"></i>
+          </div>
+          <div class="text">{{ task.text }}</div>
+          <i class="remove fa fa-times" title="Delete" v-on:click="removeTask(index)"></i>
+        </div>
+        <div class="task">
+          <i class="add fa fa-plus" v-on:click="addTask()"></i>
+          <input class="textinput" type="text" 
+            v-model="temp_task"
+            v-on:keyup.enter="addTask()"/>
+        </div>
+      </div>
+    </div>
+  </div>
+```
+
