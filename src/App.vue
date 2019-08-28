@@ -7,8 +7,7 @@
       <div class="task-list">
         <TaskItem v-for="(task, index) in task_list"
           v-bind:task="task"
-          v-bind:index="index"
-          v-on:remove="removeTask"/>
+          v-bind:index="index"/>
 
         <div class="task">
           <i class="add fa fa-plus" v-on:click="addTask()"></i>
@@ -23,26 +22,21 @@
 
 <script>
   import TaskItem from './components/TaskItem'
+  import { mapState, mapGetters } from 'vuex'
 
   export default {
     name: 'app',
     components: { TaskItem },
+    computed: {
+      ...mapState([ 'task_list' ])
+    },
     data() { return {
-      temp_task: null,
-      task_list: [
-        { done: true, text: 'Learn Javascript' },
-        { done: false, text: 'Learn ES6' },
-        { done: false, text: 'Learn Vue' },
-        { done: false, text: 'Build something awesome!' }
-      ]
+      temp_task: null
     }},
     methods: {
       addTask() {
-        this.task_list.push({ done: false, text: this.temp_task });
+        this.$store.commit('add-task', this.temp_task);
         this.temp_task = null;
-      },
-      removeTask(index) {
-        this.task_list.splice(index, 1);
       }
     }
   }

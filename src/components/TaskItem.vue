@@ -9,6 +9,8 @@
 </template>
 
 <script>
+  import { mapState, mapGetters } from 'vuex'
+
   export default {
     name: 'TaskItem',
     props: [ 'task', 'index' ],
@@ -20,9 +22,10 @@
       },
       switchTaskState() {
         this.task.done = !this.task.done;
+        this.$store.commit('change-task', { index: this.index, task: this.task });
       },
       remove() {
-        this.$emit('remove', this.index);
+        this.$store.commit('remove-task', this.index);
       }
     }
   }

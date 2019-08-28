@@ -424,3 +424,13 @@ A legnagyobb különbséget az fogja hozni, hogy a komponenseinket külön .vue 
 </style>
 ```
 
+## Vuex Store
+
+Oké, most már tudjuk, hogyan kell teljes értékű Vue componensekkel appot építeni viszont még mindig elég kényelmetlen lehet az adatok és az állapotok tárolása. Itt jön a képbe a Flux store architektúra melynek a Vue megvalósítása a Vuex package.
+
+Ennek a lényege, hogy egy központi store objecten belül tároljuk az egész app állapotát, amit globálisan minden komponensből olvasni tudunk, közvetlenül írni viszont nem. Az adatok módosítására mutációs függvényeket írhatunk, amiket a store object reactív tervezési mintának megfelelően queue-ba rendez és sorban hajt végre, ezzel biztosítva, hogy mindig konzisztens állapotban legyen elérhető az állapot. Mutációknál fontos még, hogy csak syncron hívásokat tartalmazhat, illetve a konvenció az, hogy pure functionökre törekszünk, azaz a mutációs függvényeknek minden információt, amire szükségük van paraméterekből szerezzék és az egyetlen mellékhatásuk a state object módosítása legyen. (Redux szigorúbb konvenciókat preferál, mellékhatása sem lehet, ott visszatérési értékként adjuk meg a módosított state objectet.)
+
+Mutációkon kívül lehetőségünk van még gettereket és actionöket definiálni.
+A getterek a componenseken belül használt computed értékeknek felelnek meg. Olyan függvények ezek, amik az aktuális stateből származtatott értékkel térnek vissza.
+
+Az actionöket, akkor használjuk, ha valamilyen async művelet során szeretnénk a state objectet módosítani vagy, ha egy gyakran használt logika mentén álítunk elő egy state-et. Emiatt nem ritka, hogy egy action mutációkat hív meg egy-egy async hívás végén.
