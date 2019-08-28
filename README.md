@@ -358,3 +358,47 @@ const app = new Vue({
 })
 ```
 
+## Full Vue
+
+Egy Vue applikáció az előbbiekben bemutatott módon képes néhány javascript objektumra és DOM kiegészítésre épülve beintegrálódni akármilyen projektbe. Így viszont nem tudjuk a teljes képességét kihasználni.
+Ahhoz hogy egy teljesen Vue alapú appot hozzunk létre érdemes feltelepíteni a Vue CLI packagét (https://cli.vuejs.org)
+
+``` bash
+npm i @vue/cli
+```
+
+Ezzel aztán könnyen tudunk vue projektet generálni
+
+``` bash
+vue create <project-name>
+```
+
+Ezt rögtön el is indíthatjuk bár sok minden nem fog fogadni minket.
+
+``` bash
+cd <project-name>
+npm run serve
+```
+
+### Vue Project File Structure
+
+A Vue appok a következő könyvtár struktúrát követik. Ebből a zárójel nélkülieket generálja nekünk le a Vue CLI.
+
+```
++ node_modules/
++ public/
+  - index.html
+  ...other static resources
++ src/
+  + assets/
+  + components/
+  + (views/ v. pages/)
+  + (models/)
+  + (services/)
+  + (mixins/)
+  - App.vue
+  - main.js
+- package.json
+- package_lock.json
+```
+
