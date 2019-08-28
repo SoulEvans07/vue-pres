@@ -234,3 +234,127 @@ var app = new Vue({
   </div>
 ```
 
+### Vue Component
+
+Eddig arról beszéltünk, hogy a Vue példány mi mindenre képes. Viszont szinte soha nem akarunk minden funkcionalitást egyetlen egy objektumra felaggatni elsősorban karbantarthatóság miatt.
+
+Itt jön a képbe a Vue komponens, amik nagyon hasonlítanak a Vue app példányra és felhasználásukkal képesek vagyunk tehermentesíteni, emészthető egységekre felosztani kódunkat.
+
+``` javascript
+const task_item = {
+  name: 'TaskItem',
+  template: `<div 
+    v-bind:class="styleTask()"
+    v-on:click="switchTaskState()">
+    <div class="checkbox">
+      <i class="fa fa-check" v-if="task.done"></i>
+    </div>
+    <div class="text">{{ task.text }}</div>
+    <i class="remove fa fa-times" v-on:clicks="remove()"></i>
+  </div>`,
+  props: [ 'task', 'index' ],
+  methods: {
+    ...
+  }
+}
+```
+
+Egy komponensnek van **neve**, ezt nem kötelező megadni, csak a debug toolban megjelenítendő neve.
+
+Két egyedi mezője van: template és a props. A **template** feladata megadni, hogy amikor később hivatkozunk a komponensre mit rendereljünk. A **props** pedig egy paraméter listának fogható fel, melyet a komponenst használó komponens adhat meg úgy mintha egy html attributum lenne.
+
+Ezen kívül az összes mezője egyezik a Vue példány mezőivel, így a későbbiekben említett mezőket ott is lehet használni.
+
+#### Watchers
+
+Change listenereket helyezhetünk az adatokra watchereken keresztül. Remek arra, hogy a szülőtől kapott property-k változására figyeljünk.
+
+``` javascript
+const task_item = {
+  name: 'TaskItem',
+  template: ...,
+  props: [ 'task', 'index' ],
+  watcher: {
+    index: function(n, o) { /* do something on index change */ }
+  }
+}
+```
+
+#### Custom events and emition
+
+Abban az esetben, ha a gyerek komponens szeretne üzenni a szülőnek custom eventeket használhatunk. Ezeket a szülő ugyan úgy tudja elkapni mintha natív html eventek lennének azok. 
+
+``` javascript
+const task_item = {
+  name: 'TaskItem',
+  template: ...,
+  props: [ 'task', 'index' ],
+  methods: {
+    remove() {
+        let payload = { index: this.index }
+        this.$emit('remove', payload);
+    }
+  }
+}
+```
+
+Mivel adatot(payload) is szeretnénk az eseményhez csatolni, nem elég függvényhívást kötni az eseményhez, hanem a függvény referenciáját kell átadnunk. Ekkor a függvény első paramétere a payload lesz.
+
+``` html
+<div id="parent">
+  <taskitem v-for="task in todo_list"
+    v-bind:task="task"
+    v-on:remove="removeTask"/>
+  </taskitem>
+</div>
+```
+
+``` javascript
+const app = new Vue({
+  el: '#parent',
+  ...
+  methods: {
+    removeTask(payload) {
+      console.log('removed: ' + payload.index);
+    } 
+  }
+})
+```
+
+### Component registration
+
+Most, hogy tudjuk mire képesek a komponensek beszéljünk arról, hogy használhatjuk őket.
+
+Az előbb már láthattuk, hogy hogyan hivatkozhatunk rájuk:
+
+``` html
+<div class="app">
+  ...
+  <taskitem v-for="task in todo_list"
+    v-bind:task="task"
+    v-on:remove="removeTask"/>
+  </taskitem>
+  ...
+</div>
+```
+
+Ahhoz viszont, hogy ezt így tudjuk használni előbb be kell regisztrálnunk a komponenseinket.
+
+#### Global registration
+
+``` javascript
+Vue.component('taskitem', task_item);
+```
+
+#### Local registration
+
+Local esetén csak annak a komponensnek vagy Vue példány számára regisztráljuk be, ami használni fogja azt.
+
+``` javascript
+const app = new Vue({
+  el: '#app',
+  components: { 'taskitem': task_item }
+  ...
+})
+```
+

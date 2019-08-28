@@ -12,14 +12,11 @@
     </div>
     <div class="content">
       <div class="task-list">
-        <div class="task" v-for="(task, index) in task_list"
-          v-bind:class="styleTask(task)">
-          <div class="checkbox" v-on:click="switchTaskState(task)">
-            <i class="fa fa-check" v-if="task.done"></i>
-          </div>
-          <div class="text">{{ task.text }}</div>
-          <i class="remove fa fa-times" title="Delete" v-on:click="removeTask(index)"></i>
-        </div>
+        <taskitem v-for="(task, index) in task_list"
+          v-bind:task="task"
+          v-bind:index="index"
+          v-on:remove="removeTask"></taskitem>
+
         <div class="task">
           <i class="add fa fa-plus" v-on:click="addTask()"></i>
           <input class="textinput" type="text" 
@@ -32,8 +29,36 @@
 </body>
 <script src="./vue.js"></script>
 <script>
+  const task_item = {
+    name: 'TodoItem',
+    template: `
+    <div class="task" v-bind:class="styleTask()">
+      <div class="checkbox" v-on:click="switchTaskState()">
+        <i class="fa fa-check" v-if="task.done"></i>
+      </div>
+      <div class="text">{{ task.text }}</div>
+      <i class="remove fa fa-times" title="Delete" v-on:click="remove"></i>
+    </div>
+    `,
+    props: [ 'task', 'index' ],
+    methods: {
+      styleTask() {
+        let styleClass = [];
+        if(this.task.done) styleClass.push('done');
+        return styleClass;
+      },
+      switchTaskState() {
+        this.task.done = !this.task.done;
+      },
+      remove() {
+        this.$emit('remove', this.index);
+      }
+    }
+  }
+
   const app = new Vue({
     el: '#app',
+    components: { 'taskitem': task_item },
     data:{
       temp_task: null,
       task_list: [
@@ -44,17 +69,9 @@
       ]
     },
     methods: {
-      styleTask(task) {
-        let styleClass = [];
-        if(task.done) styleClass.push('done');
-        return styleClass;
-      },
       addTask() {
         this.task_list.push({done: false, text:this.temp_task});
         this.temp_task = null;
-      },
-      switchTaskState(task) {
-        task.done = !task.done;
       },
       removeTask(index) {
         this.task_list.splice(index, 1);
