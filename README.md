@@ -196,7 +196,7 @@ var app = new Vue({
     },
     addTask() {
       this.todos.push({done: false, text:this.temp_task});
-      this.temp_task=null;
+      this.temp_task = null;
     },
     switchTaskState(task) {
       task.done = !task.done;
@@ -400,5 +400,27 @@ A Vue appok a következő könyvtár struktúrát követik. Ebből a zárójel n
   - main.js
 - package.json
 - package_lock.json
+```
+
+### Single File Component
+
+A legnagyobb különbséget az fogja hozni, hogy a komponenseinket külön .vue kiterjesztésű fájlokba rendezzük, ami egyszerre tartalmazza a templatet, scriptet és az opcionális (akár scope láthatóságú) stylingot.
+
+``` html
+<template>
+  <div class="task">
+    ...
+  </div>
+</template>
+
+<script>
+  export default {
+    name: 'app',
+    ...
+  }
+</script>
+
+<style scoped>
+</style>
 ```
 

@@ -4,22 +4,46 @@
       <h1>Todos</h1>
     </div>
     <div class="content">
+      <div class="task-list">
+        <TaskItem v-for="(task, index) in task_list"
+          v-bind:task="task"
+          v-bind:index="index"
+          v-on:remove="removeTask"/>
+
+        <div class="task">
+          <i class="add fa fa-plus" v-on:click="addTask()"></i>
+          <input class="text" type="text" 
+            v-model="temp_task"
+            v-on:keyup.enter="addTask()"/>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+  import TaskItem from './components/TaskItem'
+
   export default {
     name: 'app',
-    components: {  },
-    computed: {
-
-    },
+    components: { TaskItem },
     data() { return {
-
+      temp_task: null,
+      task_list: [
+        { done: true, text: 'Learn Javascript' },
+        { done: false, text: 'Learn ES6' },
+        { done: false, text: 'Learn Vue' },
+        { done: false, text: 'Build something awesome!' }
+      ]
     }},
     methods: {
-
+      addTask() {
+        this.task_list.push({ done: false, text: this.temp_task });
+        this.temp_task = null;
+      },
+      removeTask(index) {
+        this.task_list.splice(index, 1);
+      }
     }
   }
 </script>
